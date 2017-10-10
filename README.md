@@ -3,9 +3,9 @@
 
 #### JAVA
 
-|                   文章名称                   |
-| :--------------------------------------: |
-| [Java String总结](https://github.com/lhc20040808/SummaryOfExperience/blob/master/Java%20String总结.md#java-string-总结) |
+|                   文章名称                   | 备注                                       |
+| :--------------------------------------: | ---------------------------------------- |
+| [Java String总结](https://github.com/lhc20040808/SummaryOfExperience/blob/master/Java%20String总结.md#java-string-总结) | StringBuilder 非线程安全 <br>StringBuffer线程安全 |
 
 #### Android总结
 
@@ -23,3 +23,8 @@
 | [绘制饼图并区分点击区域](https://github.com/lhc20040808/SummaryOfExperience/blob/master/%E7%BB%98%E5%88%B6%E9%A5%BC%E5%9B%BE%E5%B9%B6%E5%8C%BA%E5%88%86%E7%82%B9%E5%87%BB%E5%8C%BA%E5%9F%9F.md) |
 
 #### 算法
+
+| 文章名称                                     | 备注   |
+| ---------------------------------------- | ---- |
+| [动态规划求解公共子串/子序列](https://github.com/lhc20040808/SummaryOfExperience/blob/master/算法题：求公共子串:公共子序列.md) |      |
+
