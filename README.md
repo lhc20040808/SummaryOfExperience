@@ -27,6 +27,7 @@
 
 | 文章名称                                     | 备注                           |
 | ---------------------------------------- | ---------------------------- |
+| [数据结构之顺序存储结构](https://github.com/lhc20040808/SummaryOfExperience/blob/master/数据结构之顺序存储结构.md) | 1、数据结构-线性表                   |
 | [动态规划求解公共子串/子序列](https://github.com/lhc20040808/SummaryOfExperience/blob/master/算法题：求公共子串:公共子序列.md) | 1、动态规划思想                     |
 | [单链表的实现及翻转](https://github.com/lhc20040808/SummaryOfExperience/blob/master/算法：C%2B%2B单链表的实现及翻转.md) | 1、c++中int与int&的区别 2、单链表就地翻转法 |
 
