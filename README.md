@@ -23,11 +23,20 @@
 | [绘制饼图并区分点击区域](https://github.com/lhc20040808/SummaryOfExperience/blob/master/%E7%BB%98%E5%88%B6%E9%A5%BC%E5%9B%BE%E5%B9%B6%E5%8C%BA%E5%88%86%E7%82%B9%E5%87%BB%E5%8C%BA%E5%9F%9F.md) |
 | [基于ListView回收池原理实现的双向滑动TableView](https://github.com/lhc20040808/TableView) |
 
-#### 算法
+#### 数据结构及算法
 
 | 文章名称                                     | 备注                           |
 | ---------------------------------------- | ---------------------------- |
 | [数据结构之顺序存储结构](https://github.com/lhc20040808/SummaryOfExperience/blob/master/数据结构之顺序存储结构.md) | 1、数据结构-线性表                   |
+| [平衡二叉树（Java）](https://github.com/lhc20040808/DataStructureJava/blob/master/src/AVLTree.java) |                              |
 | [动态规划求解公共子串/子序列](https://github.com/lhc20040808/SummaryOfExperience/blob/master/算法题：求公共子串:公共子序列.md) | 1、动态规划思想                     |
 | [单链表的实现及翻转](https://github.com/lhc20040808/SummaryOfExperience/blob/master/算法：C%2B%2B单链表的实现及翻转.md) | 1、c++中int与int&的区别 2、单链表就地翻转法 |
+
+
+
+#### 其他
+
+| 文章名称                                     | 备注                  |
+| ---------------------------------------- | ------------------- |
+| [Android Jenkins+Git+Gradle持续集成-实在太详细(转载)](http://www.jianshu.com/p/38b2e17ced73/) | Jenkins Android持续集成 |
 
