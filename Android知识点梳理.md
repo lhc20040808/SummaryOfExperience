@@ -1,6 +1,19 @@
 # Android知识点梳理
 
-[TOC]
+####目录
+- [前言](#前言)
+- [Java](#Java)
+- [Android](#Android)
+- [NDK](#NDK)
+- [设计模式](#设计模式)
+- [数据结构及算法](#数据结构及算法)
+- [网络](#网络)
+- [并发编程](#并发编程)
+- [性能优化](#性能优化)
+- [开源框架源码](#开源框架源码)
+- [架构](#架构)
+
+
 
 ## 前言
 
@@ -267,7 +280,7 @@
 
 21. ##### AsyncTask缺陷
 
-    3.0之后AsyncTask都串行调用。同时可能引起内存泄漏，Activity进行销毁了AsyncTask还在执行。即使调用了cancel()方法，doInBackGround()仍然会执行到方法结束。
+    3.0之后AsyncTask都串行调用。同时可能引起内存泄漏，Activity进行销毁了AsyncTask还在执行。即使调用了cancel()方法，doInBackGround()仍然会执行到方法结束。但这种设计可能是源于废弃`Thread.stop()`方法。强行终止线程可能导致数据库写入数据写了一半的时候突然终止，产生难以排查的错误。
 
 22. 描述Android Studio点击Build后发生了什么
 
@@ -297,9 +310,16 @@
 
     [APP保活系列](http://blog.csdn.net/andrexpert/article/details/53485360)
 
-28. recycleview listview 的区别,性能
+28. RecyclerView和Listview 的区别,性能
+
+    RecyclerView更加灵活，性能也更好。原因之一是因为RecyclerView的多级缓存机制。本身通过Recycler进行缓存，内部维护了三个List。提供了自定义的二级缓存，用户通过依赖注入的方式实现，这本身也是一种策略模式。还提供了RecyclerPool缓存池。
 
 29. 大图加载
+
+30. ##### 属性动画原理
+
+    帧动画、补间动画本质是canvas绘制时矩阵matrix改变。属性动画的本质是反射改变view的实际属性。单纯就效率而言，补间动画效率更好。属性动画要修改的内容更多，底层代码涉及反射，还会影响视图树。
+
 
 
 
@@ -309,9 +329,13 @@
 
 2. ##### 插件化原理
 
-3. ##### 热修复原理
+3. ##### 增量更新原理
 
-4. ##### 增量更新原理
+4. ##### 热修复原理
+
+   1. ##### AndFix([AndFix原理解析及案例使用](http://blog.csdn.net/u011277123/article/details/53282381))
+
+   2. ##### Sophix
 
 
 
@@ -408,7 +432,9 @@
 
 1. ##### list，map，set都有哪些具体的实现类，区别都是什么
 
-2. ##### SpareArray原理
+2. ##### SparseArray原理([SparseArray 的使用及实现原理](http://extremej.itscoder.com/sparsearray_source_analyse/))
+
+   内部用两个数组分别存储key和value。避免了基本数据类型的自动装箱，随机访问效率提高。采用二分查找找索引值，由于插入时需要复制数组，数据量大的时候，复制成本大，查询效率也变低。
 
 3. ##### HashMap实现原理
 
@@ -428,7 +454,11 @@
 6. ##### 快速排序
 
    ```java
-   public static void quickSort(int[] array, int start, int end) {
+       /**
+        * 快速排序
+        * PS:当数据存储结构为单链表时，不适用快速排序
+        */
+       public static void quickSort(int[] array, int start, int end) {
            if (start >= end) {
                return;
            }
@@ -463,12 +493,16 @@
            quickSort(array, start, left);
            quickSort(array, left + 1, end);
        }
+
    ```
 
 7. ##### 二分查找
 
    ```java
-   public static int binarySort(int[] array, int key, int start, int end) {
+       /**
+        * 二分查找
+        */
+       public static int binarySort(int[] array, int key, int start, int end) {
            int left = start;
            int right = end - 1;
 
@@ -485,7 +519,9 @@
            }
            return -1;
        }
+
    ```
+
 
 8. ##### 堆有哪些数据结构
 
@@ -506,7 +542,7 @@
 
     ```java
     public static String printNum(int x) {
-            if (x == 0) {
+            if (x <= 0) {
                 return "";
             } else {
                 return printNum(x - 1) + " " + x;
@@ -515,6 +551,27 @@
     ```
 
 14. ##### 字符串反转
+
+    ```java
+        public static String printString(String str) {
+
+            if (str == null) {
+                throw new IllegalArgumentException("");
+            }
+
+            return printString(str, 0);
+        }
+    ```
+
+
+        private static String printString(String str, int index) {
+            if (index >= str.length()) {
+                return "";
+            } else {
+                return printString(str, index + 1) + str.charAt(index);
+            }
+        }
+    ​```
 
 15. ##### 输出所有的笛卡尔积组合
 
@@ -527,6 +584,46 @@
     step2、化简分数，即求出最大公约数
 
     step3、分解质因数
+
+    ```java
+        /**
+         * 辗转相除法/欧几里得算法求公约数
+         */
+        public static int gcd(int x, int y) {
+            while (x % y != 0) {
+                int tmp = x % y;
+                x = y;
+                y = tmp;
+            }
+            return y;
+        }
+
+        public static boolean isUnlimitedDecimal(int x, int y) {
+
+            if (y == 0) {
+                throw new IllegalArgumentException("");
+            }
+
+            int num = y / gcd(x, y);
+            System.out.println("num:" + num);
+            int i = 2;
+            while (i <= num) {
+
+                if (num % i == 0) {
+                    if (i != 2 && i != 5) {
+                        return false;
+                    } 
+                    num /= i;
+                    i = 2;
+                } else {
+                    i++;
+                }
+            }
+            return true;
+        }
+    ```
+
+    ​
 
 18. ##### 算法判断单链表成环与否？
 
@@ -716,6 +813,9 @@
 5. 统计启动时间长度
 
 
+   - 在log日志不加过滤器(NoFilters)中查看Displayed
+   - adb shell am start -W 包名/全限定名
+
 
 
 
@@ -726,6 +826,7 @@
 2. OkHttp源码
 3. EventBus实现原理
 4. Retrofit与之前的网络库有什么优势
+
 
 
 
