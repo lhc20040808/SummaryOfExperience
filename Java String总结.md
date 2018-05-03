@@ -4,7 +4,11 @@
 
 [TOC]
 
-在java中String是一个不可变对象。不可变类有一个缺点，对于每个不同的值，都需要生成一个新的对象。但同时又由于不可变类其域不可变，可以通过非final的域延迟加载并缓存hashCode。
+<!--more-->
+
+在java中String是一个不可变对象。不可变类有一个缺点，对于每个不同的值，都需要生成一个新的对象。但同时又由于不可变类其域不可变，保证了其线程安全。
+
+
 
 ## 从源码中了解String
 
@@ -24,6 +28,8 @@ public final class String
 
 String对字符串的存储经由内部一个final修饰的char数组，String内部提供会造成字符串修改的方法，无一例外的返回一个新的String对象。
 
+
+
 ##### String.valueOf与Interger.toString的区别
 
 ```
@@ -33,6 +39,8 @@ String对字符串的存储经由内部一个final修饰的char数组，String�
 ```
 
 这两者没用任何区别，String.valueOf内部实现还是Integer.toString。其他基本类型同理。
+
+
 
 ## +运算符的重载
 
@@ -63,7 +71,9 @@ String str2 = str1 + "b";
     ASTORE 2
 ```
 
-可以看出，当有字符串对象参与+运算，会new出一个StringBuilder对象，接着调用append方法来不段添加字符。在这个过程中只生成了一个对象。
+可以看出，当有字符串对象参与+运算，会new出一个StringBuilder对象，接着调用append方法来不断添加字符。在这个过程中只生成了一个对象。
+
+
 
 ##### 在循环中使用+运算符
 
@@ -101,7 +111,9 @@ for(int i = 0;i < 10;i++) {
 
 重点看循环体内部的代码，可以看到每次进入循环后多会new一个StringBuilder对象，会造成过多的开销。这也是不推荐在循环中生成字符串使用+号的原因。
 
-## switch对String的支持
+
+
+## Switch对String的支持(java 8)
 
 代码就直接从网上找的
 
@@ -144,6 +156,8 @@ public static void main(String args[]) {
 
 可以看出swtich本质上还是对int进行支持，但为了避免哈希值碰撞的问题，还会通过equals方法进行一次安全检查
 
+
+
 ## 字符串常量池
 
 主要使用方法：
@@ -177,9 +191,11 @@ true
 
 - 将字符串常量池从Perm区移到了Java Heap区
 
+
+
 ## 实战解析
 
-题目1
+##### 题目1
 
 以下代码创建了几个对象
 
@@ -189,7 +205,9 @@ String a = new String("a")
 
 该代码创建了两个对象，第一个为存在字符串常量池中的字符串对象，第二个在Java Heap中的String对象
 
-题目2
+
+
+##### 题目2
 
 ```java
     String a = "hello2"; 
@@ -206,9 +224,11 @@ true
 false
 ```
 
-当final变量是基本数据类型时，且其变量值在编译期间能确切知道，就会被当做编译时常量(constant variable)。其访问会按照Java语言对常量表达式的规定而做常量折叠。
+当final变量是基本数据类型时，且其变量值在编译期间能确切知道，就会被当做编译时常量(constant variable)。其访问会按照Java语言对常量表达式的规定而做常量折叠。而"hello" + 2，编译成new StringBuilder("hello").append("2")，生产一个新的对象。
 
-题目3
+
+
+##### 题目3
 
 ```java
   public static void main(String[] args)  {
@@ -228,23 +248,11 @@ false
 false
 ```
 
-由于在编译期间无法确切知道变量b的值，所以编译时没进行常量折叠，最终由于+运算符的重载生成新的String对象c
+由于在编译期间无法确切知道变量b的值，所以编译时没进行常量折叠，最终由于+运算符的重载生成新的String对象c。
 
-题目4
 
-```java
-	String d = "d";	
-	final String a  = "a" + d;
-	final String b = "b";
-	String c = a + b;
-	System.out.println((c=="ab"));
-```
 
-```java
-false
-```
-
-题目5
+##### 题目4
 
 ```java
 	final String a  = "a";
@@ -255,6 +263,21 @@ false
 ```java
 true
 ```
+
+
+
+## String、StringBuffer、StringBuilder的区别
+
+最后通过一张表格总结一下String、StringBuffer、StringBuilder的区别。其实很简单，从线程安全、可变性的两个维度做区分即可。
+
+|            | 可变(mutable) | 不可变(Imutable) |
+| ---------- | ------------- | ---------------- |
+| 线程安全   | StringBuffer  | String           |
+| 线程不安全 | StringBuilder |                  |
+
+String由于是不可变对象，自然是线程安全的。StringBuffer内部通过synchronized锁实现了线程安全。而StringBuilder是线程不安全的。
+
+
 
 参考资料：[《Java String源码浅析》](http://blog.csdn.net/samjustin1/article/details/52253743) 
 
